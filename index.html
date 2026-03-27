@@ -235,15 +235,40 @@
     };
 
     // ==========================================
-    // 2. 가상의 API 서비스 (Google Sheets 대체)
+    // 2. 구글 시트 API 연동 서비스
     // ==========================================
-    const mockApi = {
+    const apiService = {
       saveRecord: async (userId, round, data) => {
-        // 여기에 선생님의 구글 앱스 스크립트 배포 URL을 넣으면 연동됩니다.
-        // const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbPp8VS-uuH2vbrEm-yxbTq9CJdH-EGhNzAoA9pFFTdgtjPQR5t_sPZXlT4epPOO58/exec";
-        // await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({...}) });
-        console.log(`[시트 연동 대기중] 사용자:${userId}, 라운드:${round} 완료`, data);
-        return new Promise(resolve => setTimeout(resolve, 500));
+        // ★ 여기에 선생님이 발급받은 구글 앱스 스크립트 URL을 따옴표 안에 넣으세요! ★
+        // 예시: const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbPp8VS-uuH2vbrEm-yxbTq9CJdH-EGhNzAoA9pFFTdgtjPQR5t_sPZXlT4epPOO58/exec";
+        const SCRIPT_URL = "여기에_선생님의_구글앱스스크립트_URL을_붙여넣으세요";
+        
+        // URL이 입력되지 않았을 경우 테스트 모드로 작동
+        if (SCRIPT_URL === "여기에_선생님의_구글앱스스크립트_URL을_붙여넣으세요" || SCRIPT_URL === "") {
+          console.log(`[테스트 모드] 사용자:${userId}, 라운드:${round} 완료 (시트 URL 미설정)`, data);
+          return new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        try {
+          console.log("구글 시트로 데이터 전송 중...");
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            redirect: "follow", // 구글 앱스 스크립트의 리다이렉트를 정상적으로 처리하기 위한 필수 옵션
+            // CORS 에러 방지를 위해 text/plain 속성 사용
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+            body: JSON.stringify({
+              userId: userId,
+              name: data.name,
+              round: round,
+              totalAssets: data.totalAssets
+            })
+          });
+          console.log(`[구글 시트 저장 성공] 라운드 ${round}`);
+        } catch (error) {
+          console.error("구글 시트 저장 실패:", error);
+        }
       }
     };
 
@@ -277,7 +302,8 @@
         }];
         setHistory(newHistory);
 
-        await mockApi.saveRecord(user.id, nextRoundNumber, {
+        // 시트에 데이터 저장 비동기 호출
+        await apiService.saveRecord(user.id, nextRoundNumber, {
           name: user.name,
           totalAssets: finalAssets,
           portfolio: currentInvestment.portfolio
