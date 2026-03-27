@@ -46,7 +46,7 @@
     const { useState, useEffect, useMemo } = React;
 
     // ==========================================
-    // 1. 게임 데이터 구조 및 JSON 설계
+    // 1. 게임 데이터 구조 및 JSON 설계 (매력적인 오답 적용)
     // ==========================================
     const GAME_DATA = {
       initialCapital: 300000,
@@ -57,18 +57,18 @@
           newsHint: "정부의 경제개발 5개년 계획 발표! 노동력이 많이 필요한 '경공업'이 발달하며 OO, OO, OO 등을 만들어 외국에 수출하고 있어요!",
           interestRate: 0.15,
           stocks: [
-            { id: "P의류", category: "경공업", desc: "평화시장 옷공장", currentPrice: 1000, nextPrice: 2500 },
-            { id: "Y가발", category: "경공업", desc: "여공들의 수출용 가발", currentPrice: 1000, nextPrice: 2800 },
-            { id: "D목재", category: "경공업", desc: "수출용 합판 제조", currentPrice: 1000, nextPrice: 2200 },
-            { id: "K신발", category: "경공업", desc: "고무신과 운동화 생산", currentPrice: 1000, nextPrice: 2000 },
-            { id: "S제분", category: "식품", desc: "밀가루와 설탕 제조", currentPrice: 1000, nextPrice: 1500 },
-            { id: "H철강", category: "중공업", desc: "초창기 작은 철강 공장", currentPrice: 1000, nextPrice: 900 },
-            { id: "A자동차", category: "중공업", desc: "고급 승용차 수입", currentPrice: 1000, nextPrice: 800 },
-            { id: "C전자", category: "IT", desc: "첨단 흑백 TV 수입", currentPrice: 1000, nextPrice: 700 }
+            { id: "P의류", category: "경공업", desc: "해외로 수출하는 대형 옷공장", currentPrice: 1000, nextPrice: 2500 },
+            { id: "Y가발", category: "경공업", desc: "미국에서 대유행! 수출용 가발", currentPrice: 1000, nextPrice: 2800 },
+            { id: "D목재", category: "경공업", desc: "동남아에서 수입해 만든 고급 합판", currentPrice: 1000, nextPrice: 2200 },
+            { id: "K신발", category: "경공업", desc: "국민 모두가 신는 튼튼한 고무신", currentPrice: 1000, nextPrice: 2000 },
+            { id: "S제분", category: "식품", desc: "식량난을 해결할 밀가루 제조", currentPrice: 1000, nextPrice: 1500 },
+            { id: "H철강", category: "중공업", desc: "정부가 적극 지원하는 첨단 철강 공장", currentPrice: 1000, nextPrice: 900 }, // 매력적 오답 (시기상조)
+            { id: "A자동차", category: "중공업", desc: "부유층을 위한 최고급 외제차 수입", currentPrice: 1000, nextPrice: 800 }, // 매력적 오답
+            { id: "C전자", category: "IT", desc: "미래를 선도하는 최신 흑백 TV 수입", currentPrice: 1000, nextPrice: 700 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "1960년대, 가발과 옷으로 일어선 한국",
-            content: "60년대에는 자본과 기술이 부족해 사람의 손이 많이 가는 '경공업'이 크게 발전했어요. 가발, 옷, 신발 회사에 투자했다면 높은 수익을 얻었지만, 자동차나 전자 산업은 아직 기술이 없어 투자하기 이른 시기였죠."
+            content: "60년대에는 자본과 기술이 부족해 사람의 손이 많이 가는 '경공업'이 크게 발전했어요. 가발, 옷, 신발 회사에 투자했다면 높은 수익을 얻었지만, 자동차나 전자, 철강 산업은 아직 기술과 자본이 없어 투자하기 이른 시기였죠."
           }
         },
         {
@@ -77,18 +77,18 @@
           newsHint: "이제 옷만 팔아서는 부자가 되기 어려워요! 거대한 배, 자동차를 만들고 쇳물을 녹이는 '중화학공업'을 국가에서 집중 육성합니다. 특히 OO과 OO 공장이 크게 뜹니다!",
           interestRate: 0.18,
           stocks: [
-            { id: "P제철", category: "철강", desc: "포항의 거대한 제철소", currentPrice: 2000, nextPrice: 6000 },
-            { id: "H자동차", category: "자동차", desc: "최초의 국산차 생산", currentPrice: 2000, nextPrice: 5600 },
-            { id: "H조선", category: "조선", desc: "거대한 수출용 선박 제조", currentPrice: 2000, nextPrice: 5000 },
-            { id: "D건설", category: "건설", desc: "중동 사막 건설 현장", currentPrice: 2000, nextPrice: 4000 },
-            { id: "K화학", category: "화학", desc: "석유화학 단지 건설", currentPrice: 2000, nextPrice: 3600 },
-            { id: "M빙과", category: "식품", desc: "동네 슈퍼마켓 아이스크림", currentPrice: 2000, nextPrice: 2200 },
-            { id: "P의류", category: "경공업", desc: "단순 옷공장", currentPrice: 2000, nextPrice: 1400 },
-            { id: "Y가발", category: "경공업", desc: "수출용 가발 공장", currentPrice: 2000, nextPrice: 800 }
+            { id: "P제철", category: "철강", desc: "포항에 짓는 세계적 규모의 제철소", currentPrice: 2000, nextPrice: 6000 },
+            { id: "H자동차", category: "자동차", desc: "최초의 고유 모델 국산차 생산", currentPrice: 2000, nextPrice: 5600 },
+            { id: "H조선", category: "조선", desc: "바다를 호령할 초대형 선박 제조", currentPrice: 2000, nextPrice: 5000 },
+            { id: "D건설", category: "건설", desc: "오일쇼크를 기회로! 중동 모래바람 건설", currentPrice: 2000, nextPrice: 4000 },
+            { id: "K화학", category: "화학", desc: "모든 플라스틱의 원료, 석유화학", currentPrice: 2000, nextPrice: 3600 },
+            { id: "M빙과", category: "식품", desc: "여름철 불티나게 팔리는 아이스크림", currentPrice: 2000, nextPrice: 2200 },
+            { id: "P의류", category: "경공업", desc: "전국구 교복 및 고급 신사복 제조", currentPrice: 2000, nextPrice: 1400 }, // 매력적 오답
+            { id: "Y가발", category: "경공업", desc: "미국인들이 열광하는 최고급 프리미엄 가발", currentPrice: 2000, nextPrice: 800 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "포항에 거대한 제철소가 세워졌어요!",
-            content: "70년대에는 고속도로가 뚫리고, 철강, 배, 자동차를 만드는 중화학공업이 폭발적으로 성장하며 나라 경제를 이끌었습니다. 반면 단순 노동에 기대던 가발 공장 등은 서서히 힘을 잃기 시작했죠."
+            content: "70년대에는 고속도로가 뚫리고, 철강, 배, 자동차를 만드는 중화학공업이 폭발적으로 성장하며 나라 경제를 이끌었습니다. 반면 단순 노동에 기대던 가발 공장 등은 점차 성장세가 꺾이며 힘을 잃기 시작했죠."
           }
         },
         {
@@ -97,18 +97,18 @@
           newsHint: "기름값, 이자율, 달러가치가 낮아지는 '3저 현상'이 왔어요! 컬러 TV를 만드는 전자산업과, 내 차를 가지는 'OO 시대를 여는 OO업'이 대박 납니다. 반면 OO업은 저물어가네요.",
           interestRate: 0.10,
           stocks: [
-            { id: "S전자", category: "전자", desc: "컬러TV, 냉장고 제조", currentPrice: 5000, nextPrice: 17500 },
-            { id: "H자동차", category: "자동차", desc: "미국으로 소형차 수출", currentPrice: 5000, nextPrice: 15000 },
-            { id: "D증권", category: "금융", desc: "80년대 말 주식 열풍", currentPrice: 5000, nextPrice: 14000 },
-            { id: "L신발", category: "경공업", desc: "해외 유명 메이커 하청", currentPrice: 5000, nextPrice: 7500 },
-            { id: "C극장", category: "문화", desc: "동네 단관 극장", currentPrice: 5000, nextPrice: 5000 },
-            { id: "N농기계", category: "기계", desc: "농촌용 트랙터", currentPrice: 5000, nextPrice: 4000 },
-            { id: "O해외건설", category: "건설", desc: "중동 모래바람 건설", currentPrice: 5000, nextPrice: 3000 },
-            { id: "T연탄", category: "에너지", desc: "가정용 난방 연탄", currentPrice: 5000, nextPrice: 2500 }
+            { id: "S전자", category: "전자", desc: "전 세계로 수출되는 컬러TV와 냉장고", currentPrice: 5000, nextPrice: 17500 },
+            { id: "H자동차", category: "자동차", desc: "미국 시장을 휩쓰는 베스트셀러 소형차", currentPrice: 5000, nextPrice: 15000 },
+            { id: "D증권", category: "금융", desc: "누구나 주식을 사는 80년대 주식 열풍", currentPrice: 5000, nextPrice: 14000 },
+            { id: "L신발", category: "경공업", desc: "해외 유명 나이OO 메이커 독점 하청", currentPrice: 5000, nextPrice: 7500 },
+            { id: "C극장", category: "문화", desc: "데이트 필수 코스! 핫플레이스 대형 극장", currentPrice: 5000, nextPrice: 5000 }, // 매력적 오답
+            { id: "N농기계", category: "기계", desc: "전국 농촌 현대화 사업의 핵심 트랙터", currentPrice: 5000, nextPrice: 4000 }, // 매력적 오답
+            { id: "O해외건설", category: "건설", desc: "제2의 중동 신화! 초대형 사막 건설", currentPrice: 5000, nextPrice: 3000 }, // 매력적 오답
+            { id: "T연탄", category: "에너지", desc: "겨울철 서민들의 절대 필수 난방 연료", currentPrice: 5000, nextPrice: 2500 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "단군 이래 최대의 호황기와 전자산업의 발전",
-            content: "3저 호황을 맞아 수출이 엄청나게 늘었어요! S전자 같은 가전제품과 H자동차의 주가가 크게 올랐습니다. 반면 사람들이 기름보일러를 쓰기 시작하며 연탄회사는 큰 타격을 입었죠."
+            content: "3저 호황을 맞아 가전제품과 자동차 수출이 크게 늘었습니다. 중산층이 늘며 '마이카(내 차)' 시대가 열렸죠. 하지만 아파트에 기름보일러가 보급되며 연탄회사는 타격을 입었고, 중동 건설 붐도 80년대에는 끝이 났습니다."
           }
         },
         {
@@ -117,18 +117,18 @@
           newsHint: "세계화 바람이 불며 사람들이 빚을 내어 아파트를 사고 주식에 투자해요. 겉보기엔 화려한 OO과 OO업이 유행입니다! 샴페인을 너무 일찍 터뜨린 걸까요?",
           interestRate: 0.12,
           stocks: [
-            { id: "J종금", category: "금융", desc: "기업에게 돈을 펑펑 빌려줌", currentPrice: 10000, nextPrice: 25000 },
-            { id: "H건설", category: "건설", desc: "신도시 아파트 짓기 열풍", currentPrice: 10000, nextPrice: 22000 },
-            { id: "S텔레콤", category: "통신", desc: "삐삐와 초창기 핸드폰", currentPrice: 10000, nextPrice: 20000 },
-            { id: "S반도체", category: "IT", desc: "메모리 반도체 세계 1위", currentPrice: 10000, nextPrice: 18000 },
-            { id: "M상사", category: "무역", desc: "해외 물건 마구잡이 수입", currentPrice: 10000, nextPrice: 15000 },
-            { id: "G방직", category: "섬유", desc: "전통 면직물 공장", currentPrice: 10000, nextPrice: 6000 },
-            { id: "P의류", category: "경공업", desc: "국내산 신발과 옷", currentPrice: 10000, nextPrice: 5000 },
-            { id: "K신발", category: "경공업", desc: "부산 대형 신발공장", currentPrice: 10000, nextPrice: 4000 }
+            { id: "J종금", category: "금융", desc: "외국에서 달러를 싼 값에 무한정 빌려오는 곳", currentPrice: 10000, nextPrice: 25000 },
+            { id: "H건설", category: "건설", desc: "분당, 일산 등 신도시 아파트 건설 싹쓸이", currentPrice: 10000, nextPrice: 22000 },
+            { id: "S텔레콤", category: "통신", desc: "최첨단 삐삐와 초창기 벽돌 핸드폰 독점", currentPrice: 10000, nextPrice: 20000 },
+            { id: "S반도체", category: "IT", desc: "메모리 반도체 생산 세계 1위 달성", currentPrice: 10000, nextPrice: 18000 },
+            { id: "M상사", category: "무역", desc: "해외 유명 브랜드 싹쓸이 수입 유통", currentPrice: 10000, nextPrice: 15000 },
+            { id: "G방직", category: "섬유", desc: "100년 전통을 자랑하는 최고급 방직 기업", currentPrice: 10000, nextPrice: 6000 }, // 매력적 오답
+            { id: "P의류", category: "경공업", desc: "장인정신이 깃든 국내산 명품 의류", currentPrice: 10000, nextPrice: 5000 }, // 매력적 오답
+            { id: "K신발", category: "경공업", desc: "세계 수출 1위 타이틀의 자랑스러운 신발 공장", currentPrice: 10000, nextPrice: 4000 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "풍요롭지만, 빚으로 쌓은 탑",
-            content: "경제가 계속 좋을 줄 알고 무리하게 돈을 빌려 투자를 늘렸어요. 은행이나 건설 주식이 인기가 많았지만, 값싼 중국산에 밀린 우리나라 경공업은 서서히 무너지고 있었습니다."
+            content: "경제가 계속 좋을 줄 알고 은행과 기업들이 무리하게 빚을 내어 투자를 늘렸어요. 금융과 건설 주식이 인기가 많았지만, 값싼 중국산에 밀린 우리나라의 전통적인 신발/옷 공장들은 조용히 문을 닫고 있었습니다."
           }
         },
         {
@@ -137,18 +137,18 @@
           newsHint: "긴급 뉴스! 나라에 달러가 바닥나 국가 부도 위기인 'OOO 사태'가 터졌습니다! 수많은 기업이 망하고 있어요. 이럴 땐 이자를 엄청나게 주는 '은행 저축'이나 달러 대신 쓸 'O'이 최고입니다!",
           interestRate: 0.25,
           stocks: [
-            { id: "N금모으기", category: "귀금속", desc: "달러 대신 낼 수 있는 순금", currentPrice: 20000, nextPrice: 50000 },
-            { id: "S반도체", category: "IT", desc: "튼튼한 수출기업", currentPrice: 20000, nextPrice: 14000 },
-            { id: "K은행", category: "우량금융", desc: "그나마 버티는 안전한 은행", currentPrice: 20000, nextPrice: 10000 },
-            { id: "H자동차", category: "자동차", desc: "어마어마한 빚을 진 자동차", currentPrice: 20000, nextPrice: 6000 },
-            { id: "D백화점", category: "유통", desc: "고급 물건을 파는 백화점", currentPrice: 20000, nextPrice: 4000 },
-            { id: "M상사", category: "무역", desc: "문어발식으로 사업하던 회사", currentPrice: 20000, nextPrice: 3000 },
-            { id: "H건설", category: "건설", desc: "빚으로 세운 아파트 회사", currentPrice: 20000, nextPrice: 2000 },
-            { id: "J종금", category: "부실금융", desc: "무리하게 돈을 빌려줬던 곳", currentPrice: 20000, nextPrice: 1000 }
+            { id: "N금모으기", category: "귀금속", desc: "나라의 빚을 갚기 위해 온 국민이 모은 순금", currentPrice: 20000, nextPrice: 50000 },
+            { id: "S반도체", category: "IT", desc: "외국에 수출해서 달러를 벌어오는 효자 기업", currentPrice: 20000, nextPrice: 14000 },
+            { id: "K은행", category: "우량금융", desc: "정부가 절대 망하지 않는다고 약속한 거대 은행", currentPrice: 20000, nextPrice: 10000 }, // 매력적 오답
+            { id: "H자동차", category: "자동차", desc: "국민 1가구 1차 시대의 주역! 절대 안 망함", currentPrice: 20000, nextPrice: 6000 }, // 매력적 오답
+            { id: "D백화점", category: "유통", desc: "연일 매진 행진! VVIP를 위한 최고급 백화점", currentPrice: 20000, nextPrice: 4000 }, // 매력적 오답
+            { id: "M상사", category: "무역", desc: "전 세계를 누비는 초거대 문어발식 무역 상사", currentPrice: 20000, nextPrice: 3000 }, // 매력적 오답
+            { id: "H건설", category: "건설", desc: "신도시를 점령한 대한민국 1등 아파트 건설사", currentPrice: 20000, nextPrice: 2000 }, // 매력적 오답
+            { id: "J종금", category: "부실금융", desc: "이자 수익률 1위! 최고의 종합금융투자사", currentPrice: 20000, nextPrice: 1000 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "국가 부도 위기, 뼈아픈 시련 (IMF)",
-            content: "외국인들이 달러를 한꺼번에 빼가면서 빚이 많은 기업과 은행이 무너졌습니다. 주식은 휴지조각이 되었죠. 이 시기에는 무려 20%가 넘는 이자를 주던 안전한 '은행 저축'이나 가치가 오른 '금'이 최고의 선택이었습니다."
+            content: "외국인들이 달러를 한꺼번에 빼가면서 빚으로 쌓아올린 기업과 은행, 백화점 등이 줄줄이 무너졌습니다. 주식은 휴지조각이 되었죠. 이 시기에는 무려 20%가 넘는 이자를 주던 안전한 '은행 저축'이나 가치가 오른 '금'이 최고의 선택이었습니다."
           }
         },
         {
@@ -157,18 +157,18 @@
           newsHint: "집집마다 초고속 인터넷이 깔리고 '닷컴(.com)' 이름만 붙으면 주식이 폭등하는 OO 열풍이 불어요. PC방, 포털 사이트가 대유행! 반면 낡은 기술인 OO는 역사 속으로 사라집니다.",
           interestRate: 0.05,
           stocks: [
-            { id: "D다음", category: "IT", desc: "이메일과 카페 인터넷 포털", currentPrice: 5000, nextPrice: 20000 },
-            { id: "N소프트", category: "게임", desc: "PC방 온라인 게임 돌풍", currentPrice: 5000, nextPrice: 17500 },
-            { id: "S텔레콤", category: "통신", desc: "핸드폰 보급률 폭발", currentPrice: 5000, nextPrice: 12500 },
-            { id: "K홈쇼핑", category: "유통", desc: "TV로 주문하는 홈쇼핑", currentPrice: 5000, nextPrice: 11000 },
-            { id: "P제철", category: "철강", desc: "전통적인 철강 굴뚝산업", currentPrice: 5000, nextPrice: 5500 },
-            { id: "T필름", category: "사진", desc: "필름 카메라 제조", currentPrice: 5000, nextPrice: 2500 },
-            { id: "C비디오", category: "오프라인", desc: "동네 비디오 대여점", currentPrice: 5000, nextPrice: 1000 },
-            { id: "B삐삐", category: "통신", desc: "허리춤에 차는 호출기", currentPrice: 5000, nextPrice: 500 }
+            { id: "D다음", category: "IT", desc: "온 국민이 가입한 이메일과 인터넷 카페", currentPrice: 5000, nextPrice: 20000 },
+            { id: "N소프트", category: "게임", desc: "PC방 밤샘 열풍을 일으킨 국민 온라인 게임", currentPrice: 5000, nextPrice: 17500 },
+            { id: "S텔레콤", category: "통신", desc: "이제 누구나 핸드폰을 쓴다! 이동통신 1위", currentPrice: 5000, nextPrice: 12500 },
+            { id: "K홈쇼핑", category: "유통", desc: "전화 한 통으로 집 앞까지! TV 홈쇼핑", currentPrice: 5000, nextPrice: 11000 },
+            { id: "P제철", category: "철강", desc: "국가 산업의 뼈대를 책임지는 튼튼한 철강", currentPrice: 5000, nextPrice: 5500 },
+            { id: "T필름", category: "사진", desc: "변치 않는 추억, 세계 최고 화질의 명품 필름", currentPrice: 5000, nextPrice: 2500 }, // 매력적 오답
+            { id: "C비디오", category: "오프라인", desc: "전국 1만 개 가맹점! 독보적 1위 비디오 체인", currentPrice: 5000, nextPrice: 1000 }, // 매력적 오답
+            { id: "B삐삐", category: "통신", desc: "전 국민 필수품! 초소형 무선 호출기 삐삐", currentPrice: 5000, nextPrice: 500 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "인터넷 강국으로의 도약",
-            content: "초고속 인터넷망이 깔리며 네이버, 다음, 온라인 게임 회사들이 엄청나게 성장했습니다! 반면, 핸드폰과 인터넷의 발달로 삐삐(호출기)나 동네 비디오 대여점은 완전히 역사 속으로 사라지게 되었죠."
+            content: "초고속 인터넷망이 깔리며 네이버, 다음, 온라인 게임 회사들이 엄청나게 성장했습니다! 반면, 핸드폰과 인터넷의 발달로 아무리 잘 나가던 비디오 대여점이나 삐삐 회사라도 완벽하게 역사 속으로 사라지게 되었죠."
           }
         },
         {
@@ -177,18 +177,18 @@
           newsHint: "모두가 손에 작은 컴퓨터 'OOOO'을 들고 다니며 세상을 바꿉니다! 모바일 메신저 앱 시장이 폭발하고, 한국의 O-POP과 화장품이 세계를 휩쓸고 있어요!",
           interestRate: 0.03,
           stocks: [
-            { id: "K메신저", category: "플랫폼", desc: "국민 스마트폰 메신저 앱", currentPrice: 10000, nextPrice: 30000 },
-            { id: "S전자", category: "IT기기", desc: "전세계 1위 스마트폰", currentPrice: 10000, nextPrice: 28000 },
-            { id: "A화장품", category: "뷰티", desc: "중국으로 화장품 수출 대박", currentPrice: 10000, nextPrice: 26000 },
-            { id: "S엔터", category: "문화", desc: "K팝 아이돌 기획사", currentPrice: 10000, nextPrice: 25000 },
-            { id: "N게임", category: "PC게임", desc: "모바일 전환에 늦은 게임사", currentPrice: 10000, nextPrice: 8000 },
-            { id: "D조선", category: "중공업", desc: "배 만드는 산업 불황", currentPrice: 10000, nextPrice: 5000 },
-            { id: "M디카", category: "전자기기", desc: "컴팩트 디지털 카메라", currentPrice: 10000, nextPrice: 1500 },
-            { id: "I엠피쓰리", category: "음향기기", desc: "노래만 듣는 MP3 플레이어", currentPrice: 10000, nextPrice: 1000 }
+            { id: "K메신저", category: "플랫폼", desc: "대한민국 5천만이 매일 쓰는 스마트폰 메신저", currentPrice: 10000, nextPrice: 30000 },
+            { id: "S전자", category: "IT기기", desc: "전세계를 휩쓴 혁신의 아이콘, 스마트폰 1위", currentPrice: 10000, nextPrice: 28000 },
+            { id: "A화장품", category: "뷰티", desc: "중국 관광객이 싹쓸이하는 프리미엄 화장품", currentPrice: 10000, nextPrice: 26000 },
+            { id: "S엔터", category: "문화", desc: "전 세계 소녀팬들을 열광시킨 K팝 아이돌", currentPrice: 10000, nextPrice: 25000 },
+            { id: "N게임", category: "PC게임", desc: "PC방 점유율 부동의 1위! 초대형 PC 게임사", currentPrice: 10000, nextPrice: 8000 }, // 매력적 오답
+            { id: "D조선", category: "중공업", desc: "세계 바다를 호령하는 1등 초대형 조선소", currentPrice: 10000, nextPrice: 5000 }, // 매력적 오답
+            { id: "M디카", category: "전자기기", desc: "1000만 화소 돌파! 최고급 렌즈 장착 디카", currentPrice: 10000, nextPrice: 1500 }, // 매력적 오답
+            { id: "I엠피쓰리", category: "음향기기", desc: "무려 1만 곡이 들어가는 혁신적인 MP3 플레이어", currentPrice: 10000, nextPrice: 1000 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "스마트폰 혁명과 문화 강국",
-            content: "S전자의 스마트폰과 메신저 앱이 세상을 바꿨고, K팝 아이돌들이 큰 돈을 벌어왔습니다. 하지만 모두가 스마트폰으로 사진을 찍고 노래를 듣게 되면서 디카와 MP3 회사들은 큰 위기를 맞고 무너졌습니다."
+            content: "S전자의 스마트폰과 메신저 앱이 세상을 바꿨고, K팝 아이돌들이 큰 돈을 벌어왔습니다. 하지만 모두가 스마트폰으로 사진을 찍고 노래를 듣게 되면서, 기존에 잘 나가던 디카와 MP3 회사들은 큰 위기를 맞고 무너졌습니다."
           }
         },
         {
@@ -197,18 +197,18 @@
           newsHint: "전염병으로 사람들이 밖에 나가지 못해요! 집 밖을 나가지 않는 OOO(비대면) 서비스, 배달 앱, 그리고 백신을 연구하는 OO오 회사들이 엄청난 돈을 법니다.",
           interestRate: 0.01,
           stocks: [
-            { id: "C진단키트", category: "의료", desc: "전염병 진단키트 전세계 수출", currentPrice: 20000, nextPrice: 80000 },
-            { id: "S바이오", category: "의료", desc: "백신 연구 및 위탁 생산", currentPrice: 20000, nextPrice: 70000 },
-            { id: "D배달", category: "플랫폼", desc: "집으로 음식 배달 앱", currentPrice: 20000, nextPrice: 56000 },
-            { id: "N포털", category: "IT", desc: "비대면 온라인 쇼핑", currentPrice: 20000, nextPrice: 50000 },
-            { id: "L마트", category: "오프라인", desc: "사람이 없는 대형마트", currentPrice: 20000, nextPrice: 12000 },
-            { id: "C극장", category: "문화", desc: "텅 빈 팝콘 영화관", currentPrice: 20000, nextPrice: 10000 },
-            { id: "K항공", category: "운송", desc: "국제선 여객기 운행 전면 중단", currentPrice: 20000, nextPrice: 8000 },
-            { id: "M여행사", category: "관광", desc: "해외 여행 전면 금지", currentPrice: 20000, nextPrice: 6000 }
+            { id: "C진단키트", category: "의료", desc: "전염병 진단키트 전세계 긴급 수출 대박", currentPrice: 20000, nextPrice: 80000 },
+            { id: "S바이오", category: "의료", desc: "치료제 및 백신 연구, 위탁 생산 전진기지", currentPrice: 20000, nextPrice: 70000 },
+            { id: "D배달", category: "플랫폼", desc: "집콕 시대 필수품! 문 앞까지 음식 배달 앱", currentPrice: 20000, nextPrice: 56000 },
+            { id: "N포털", category: "IT", desc: "집에서 모든 것을 사는 비대면 온라인 쇼핑", currentPrice: 20000, nextPrice: 50000 },
+            { id: "L마트", category: "오프라인", desc: "주말마다 발 디딜 틈 없는 초대형 오프라인 마트", currentPrice: 20000, nextPrice: 12000 }, // 매력적 오답
+            { id: "C극장", category: "문화", desc: "천만 관객 돌파! 쾌적하고 거대한 멀티플렉스", currentPrice: 20000, nextPrice: 10000 }, // 매력적 오답
+            { id: "K항공", category: "운송", desc: "매년 여객수 신기록 달성! 대한민국 1등 항공사", currentPrice: 20000, nextPrice: 8000 }, // 매력적 오답
+            { id: "M여행사", category: "관광", desc: "만족도 1위! 프리미엄 유럽 투어 전문 여행사", currentPrice: 20000, nextPrice: 6000 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "위기 속의 기회, 비대면 산업의 폭발",
-            content: "사람들이 집에만 있으면서 배달, 온라인 쇼핑의 인기가 하늘을 찔렀고 진단키트 등 바이오 주식이 폭등했습니다. 반면 비행기가 멈추고 여행을 가지 못하면서 항공사와 극장, 오프라인 마트는 눈물을 흘렸죠."
+            content: "사람들이 집에만 있으면서 배달, 온라인 쇼핑의 인기가 하늘을 찔렀고 진단키트 등 바이오 주식이 폭등했습니다. 반면 비행기가 멈추고 밖을 나가지 못하게 되면서 아무리 우량했던 항공사와 극장이라도 큰 손실을 피할 수 없었죠."
           }
         },
         {
@@ -217,33 +217,40 @@
           newsHint: "인간의 지능을 뛰어넘는 OO(인공지능)가 세상을 지배하고, 매연을 뿜는 차 대신 전기로 가는 OO 차가 필수가 되었습니다. 초정밀 반도체와 2차 전지가 핵심이에요!",
           interestRate: 0.04,
           stocks: [
-            { id: "N로봇", category: "첨단", desc: "AI 두뇌 휴머노이드 로봇", currentPrice: 50000, nextPrice: 150000 },
-            { id: "L배터리", category: "친환경", desc: "전기차용 2차 전지", currentPrice: 50000, nextPrice: 140000 },
-            { id: "S반도체", category: "IT", desc: "AI용 초고속 메모리 칩", currentPrice: 50000, nextPrice: 125000 },
-            { id: "E태양광", category: "에너지", desc: "신재생 무공해 에너지", currentPrice: 50000, nextPrice: 110000 },
-            { id: "O정유", category: "화석연료", desc: "기름(석유) 정제 공장", currentPrice: 50000, nextPrice: 30000 },
-            { id: "G플라스틱", category: "소재", desc: "잘 썩지 않는 일회용 플라스틱", currentPrice: 50000, nextPrice: 25000 },
-            { id: "P내연기관", category: "자동차", desc: "자동차 매연/엔진 부품", currentPrice: 50000, nextPrice: 20000 },
-            { id: "B석탄발전", category: "에너지", desc: "미세먼지 뿜는 석탄 발전소", currentPrice: 50000, nextPrice: 15000 }
+            { id: "N로봇", category: "첨단", desc: "스스로 생각하는 AI 두뇌 휴머노이드 로봇", currentPrice: 50000, nextPrice: 150000 },
+            { id: "L배터리", category: "친환경", desc: "전기차 심장을 책임지는 초고효율 2차 전지", currentPrice: 50000, nextPrice: 140000 },
+            { id: "S반도체", category: "IT", desc: "AI 연산에 필수적인 초고속/고용량 메모리 칩", currentPrice: 50000, nextPrice: 125000 },
+            { id: "E태양광", category: "에너지", desc: "지구를 살리는 무공해 신재생 에너지 기술", currentPrice: 50000, nextPrice: 110000 },
+            { id: "O정유", category: "화석연료", desc: "끊임없는 수요! 세계 최대 규모의 석유 정제공장", currentPrice: 50000, nextPrice: 30000 }, // 매력적 오답
+            { id: "G플라스틱", category: "소재", desc: "가볍고 튼튼하며 절대 안 썩는 만능 플라스틱", currentPrice: 50000, nextPrice: 25000 }, // 매력적 오답
+            { id: "P내연기관", category: "자동차", desc: "100년 기술력이 집약된 고성능 스포츠카 엔진", currentPrice: 50000, nextPrice: 20000 }, // 매력적 오답
+            { id: "B석탄발전", category: "에너지", desc: "가장 값싸고 효율적인 초대형 화력(석탄) 발전소", currentPrice: 50000, nextPrice: 15000 } // 매력적 오답
           ],
           historicalFeedback: {
             title: "여러분이 만들어갈 대한민국의 미래!",
-            content: "과거 가발을 만들던 대한민국은 이제 세계 최고의 AI 반도체와 친환경 배터리를 만드는 국가가 되었습니다. 화석 연료나 환경 오염 기업은 시장에서 사라지고 있죠. 앞으로의 경제는 여러분의 현명한 선택에 달려있습니다!"
+            content: "과거 가발을 만들던 대한민국은 이제 세계 최고의 AI 반도체와 친환경 배터리를 만드는 국가가 되었습니다. 화석 연료나 플라스틱 같은 환경 오염 기업은 시장에서 퇴출되고 있죠. 앞으로의 경제는 여러분의 현명한 선택에 달려있습니다!"
           }
         }
       ]
     };
+
+    // 배열을 무작위로 섞는 유틸리티 함수
+    function shuffleArray(array) {
+      const newArr = [...array];
+      for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+      }
+      return newArr;
+    }
 
     // ==========================================
     // 2. 구글 시트 API 연동 서비스
     // ==========================================
     const apiService = {
       saveRecord: async (userId, round, data) => {
-        // ★ 여기에 선생님이 발급받은 구글 앱스 스크립트 URL을 따옴표 안에 넣으세요! ★
-        // 예시: const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbPp8VS-uuH2vbrEm-yxbTq9CJdH-EGhNzAoA9pFFTdgtjPQR5t_sPZXlT4epPOO58/exec";
-        const SCRIPT_URL = "여기에_선생님의_구글앱스스크립트_URL을_붙여넣으세요";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5sp0mhCqqXeajR4QyamGKIIZCMnsEWkWDapMhhENNNzUS6lMnHl1sw9viNm6ZYQ76/exec";
         
-        // URL이 입력되지 않았을 경우 테스트 모드로 작동
         if (SCRIPT_URL === "여기에_선생님의_구글앱스스크립트_URL을_붙여넣으세요" || SCRIPT_URL === "") {
           console.log(`[테스트 모드] 사용자:${userId}, 라운드:${round} 완료 (시트 URL 미설정)`, data);
           return new Promise(resolve => setTimeout(resolve, 500));
@@ -253,8 +260,8 @@
           console.log("구글 시트로 데이터 전송 중...");
           await fetch(SCRIPT_URL, {
             method: "POST",
-            redirect: "follow", // 구글 앱스 스크립트의 리다이렉트를 정상적으로 처리하기 위한 필수 옵션
-            // CORS 에러 방지를 위해 text/plain 속성 사용
+            mode: "no-cors",
+            redirect: "follow", 
             headers: {
               "Content-Type": "text/plain;charset=utf-8",
             },
@@ -302,7 +309,6 @@
         }];
         setHistory(newHistory);
 
-        // 시트에 데이터 저장 비동기 호출
         await apiService.saveRecord(user.id, nextRoundNumber, {
           name: user.name,
           totalAssets: finalAssets,
@@ -385,7 +391,6 @@
           setUser({ id: num, name: name });
           setScreen('news');
         } else {
-          // 웹앱 규정상 alert() 대신 모달/경고창 처리
           setErrorMsg("학번과 이름을 모두 입력해주세요!");
           setTimeout(() => setErrorMsg(''), 2000);
         }
@@ -474,12 +479,17 @@
     }
 
     // ==========================================
-    // 화면 3: 투자 입력 화면
+    // 화면 3: 투자 입력 화면 (순서 랜덤화 적용)
     // ==========================================
     function InvestScreen({ round, totalCash, onInvestComplete, formatMoney }) {
       const [localPortfolio, setLocalPortfolio] = useState({});
       const [localSavings, setLocalSavings] = useState(0);
       const [errorMsg, setErrorMsg] = useState('');
+
+      // ★ 매 라운드 진입 시 종목 순서를 무작위로 섞음 ★
+      const shuffledStocks = useMemo(() => {
+        return shuffleArray(round.stocks);
+      }, [round.roundId]);
 
       useEffect(() => {
         const initPort = {};
@@ -617,7 +627,8 @@
               </div>
             </div>
 
-            {round.stocks.map(stock => {
+            {/* 랜덤으로 섞인 주식 리스트를 렌더링 */}
+            {shuffledStocks.map(stock => {
               const qty = localPortfolio[stock.id] || 0;
               return (
                 <div key={stock.id} className="bg-white rounded-2xl p-3 border border-slate-200 shadow-sm flex justify-between items-center">
@@ -665,7 +676,7 @@
     }
 
     // ==========================================
-    // 화면 4: 라운드 투자 결과 및 피드백
+    // 화면 4: 라운드 투자 결과 및 피드백 (수익률 순 정렬)
     // ==========================================
     function ResultScreen({ round, investment, onNext, formatMoney, isLastRound, history }) {
       const [showAnimation, setShowAnimation] = useState(false);
@@ -674,6 +685,15 @@
       useEffect(() => {
         setTimeout(() => setShowAnimation(true), 300);
       }, []);
+
+      // 결과 화면에서는 수익률이 가장 높은 순서대로 정렬하여 성적표처럼 보여줌
+      const sortedStocks = useMemo(() => {
+        return [...round.stocks].sort((a, b) => {
+          const aReturn = (a.nextPrice - a.currentPrice) / a.currentPrice;
+          const bReturn = (b.nextPrice - b.currentPrice) / b.currentPrice;
+          return bReturn - aReturn;
+        });
+      }, [round.roundId]);
 
       const interestEarned = Math.floor(savings * round.interestRate);
       const finalSavings = savings + interestEarned;
@@ -728,7 +748,8 @@
           <div className="bg-slate-100 rounded-2xl p-4 mb-6 relative z-10 flex-1">
             <h4 className="font-bold text-slate-700 mb-3 text-sm">이 시대의 실제 기업 성적표</h4>
             <div className="grid grid-cols-2 gap-2 mb-2">
-                 {round.stocks.map(stock => {
+                 {/* 정렬된 주식 리스트 렌더링 */}
+                 {sortedStocks.map(stock => {
                    const qty = portfolio[stock.id] || 0;
                    const percentChange = ((stock.nextPrice - stock.currentPrice) / stock.currentPrice) * 100;
                    const isUp = percentChange > 0;
